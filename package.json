@@ -1,0 +1,54 @@
+{
+  "name": "@5minds/loggerhythm",
+  "publishConfig": {
+      "registry": "https://www.npmjs.com"
+  },
+  "version": "1.0.0",
+  "description": "wrapper for winston to use it like debug with namespaces",
+  "publicConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": {
+    "name": "5Minds IT-Solutions GmbH & Co. KG",
+    "email": "info@5minds.de",
+    "url": "https://5minds.de"
+  },
+  "maintainers": [
+    {
+      "name": "Heiko Mathes",
+      "email": "heiko.mathes@5minds.de"
+    }
+  ],
+  "contributors": [
+    {
+      "name": "Martin Moellenbeck",
+      "email": "martin.moellenbeck@5Minds.de"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/5minds/loggerythm"
+  },
+  "license": "MIT",
+  "files": [
+    "index.js",
+    "lib/",
+    "History.md",
+    "LICENSE.md",
+    "README.md"
+  ],
+  "dependencies": {
+    "winston": "^2.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.4.0",
+    "eslint-config-5minds": "^0.0.3",
+    "eslint-plugin-import": "^1.14.0",
+    "mocha": "^3.0.2",
+    "should": "^11.1.0"
+  }
+}
