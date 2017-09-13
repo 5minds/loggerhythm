@@ -1,6 +1,4 @@
-'use strict';
-
-class Defaults {
+export class Defaults {
 
   static get logLevel() {
     if (process.env.NODE_ENV === 'production') {
@@ -31,7 +29,4 @@ class Defaults {
       silly: {level: 6, color: 'cyan'},
     };
   }
-
 }
-
-module.exports = Defaults;

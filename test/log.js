@@ -1,12 +1,12 @@
 'use strict';
 
-const logger = require('./../index');
-const defaultLogger = require('./../index')();
+const loggerSetup = require('./../dist/index').setup;
+const defaultLogger = require('./../dist/index').createLogger();
 
-const l1 = require('./../index')('logger1');
-const l2 = require('./../index')('logger2');
-const l3 = require('./../index')('logger3');
-const l4 = require('./../index')('logger4');
+const l1 = require('./../dist/index').createLogger('logger1');
+const l2 = require('./../dist/index').createLogger('logger2');
+const l3 = require('./../dist/index').createLogger('logger3');
+const l4 = require('./../dist/index').createLogger('logger4');
 
 defaultLogger.debug('hello default');
 
@@ -37,15 +37,13 @@ l2.error('error l2');
 l2.error(new Error('hello'));
 l2.critical('crit l2');
 
-l3.setup.logLevel('warn');
-
 l3.debug('debug not logged');
 l3.info('info not logged');
 l3.warn('warn logged');
 l3.error('error logged');
 l3.critical('crit logged');
 
-logger.setup.logLevel('silly');
+loggerSetup.logLevel('silly');
 
 l4.silly('silly logged');
 l4.debug('debug logged');

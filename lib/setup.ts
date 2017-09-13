@@ -1,11 +1,9 @@
-'use strict';
-
-const winston = require('winston');
-const defaults = require('./defaults');
+import * as winston from 'winston';
+import {Defaults as defaults} from './defaults';
 
 class Setup {
 
-  defaults() {
+  public defaults(): Setup {
 
     return this._winstonConsoleTransport(defaults.winstonConsoleTransport)
       ._logLevels(defaults.logLevels)
@@ -13,17 +11,17 @@ class Setup {
       .maxObjectLogDepth(10);
   }
 
-  logLevel(loglevel) {
-    winston.level = loglevel;
+  public logLevel(loglevel: string): Setup {
+    (<any> winston).level = loglevel;
     return this;
   }
 
-  maxObjectLogDepth(maxDepth) {
-    winston.default.transports.console.depth = maxDepth;
+  public maxObjectLogDepth(maxDepth: number): Setup {
+    (<any> winston.default.transports.console).depth = maxDepth;
     return this;
   }
 
-  _winstonConsoleTransport(transportSettings) {
+  private _winstonConsoleTransport(transportSettings) {
     winston.remove(winston.transports.Console);
     winston.add(winston.transports.Console, transportSettings);
     return this;
@@ -51,4 +49,4 @@ class Setup {
 
 }
 
-module.exports = new Setup();
+export = new Setup();

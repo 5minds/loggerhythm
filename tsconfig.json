@@ -1,0 +1,16 @@
+{
+  "typingOptions": {
+    "enableAutoDiscovery": true
+  },
+  "compilerOptions": {
+    "module": "amd",
+    "target": "es2017",
+    "outDir": "dist",
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "sourceMap": true,
+    "experimentalDecorators": true
+  }
+}

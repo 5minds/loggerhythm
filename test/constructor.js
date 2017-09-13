@@ -2,7 +2,7 @@
 
 const should = require('should');
 
-const create_instance = require("../index");
+const create_instance = require('../dist/index').createLogger;
 
 describe('Loggerhythm#constructor', () => {
 
