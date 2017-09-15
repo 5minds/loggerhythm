@@ -1,4 +1,4 @@
-import {Logger} from '../dist/commonjs/loggerhythm';
+import {Logger, LogLevel} from '../dist/commonjs/loggerhythm';
 
 const defaultLogger: Logger = new Logger();
 
@@ -7,11 +7,11 @@ const l2: Logger = new Logger('logger2');
 const l3: Logger = new Logger('logger3');
 const l4: Logger = new Logger('logger4');
 
-l1.onLog((loglevel: string, namespace: string, message: string) => {
+l1.subscribe((loglevel: LogLevel, namespace: string, message: string) => {
   console.log('l1');
 });
 
-Logger.onLog((loglevel: string, namespace: string, message: string) => {
+Logger.subscribe((loglevel: LogLevel, namespace: string, message: string) => {
   console.log('global');
 });
 

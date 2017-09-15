@@ -14,6 +14,10 @@ export interface ILoggerhythmHook {
   (logLevel: LogLevel, namespace: string, message: string, ...data: Array<any>): void;
 }
 
+export interface ILoggerSubscription {
+  dispose(): void;
+}
+
 function defaultSetup(): void {
   winston.remove(winston.transports.Console);
   winston.add(winston.transports.Console, {
@@ -55,13 +59,13 @@ function defaultSetup(): void {
   (<any> winston.default.transports.console).depth = 10;
 }
 
-const logCallbacks: Array<ILoggerhythmHook> = [];
+const subscribers: Array<ILoggerhythmHook> = [];
 
 defaultSetup();
 export class Logger {
 
   private _namespace: string;
-  private _logCallbacks: Array<ILoggerhythmHook> = [];
+  private subscribers: Array<ILoggerhythmHook> = [];
 
   public get namespace(): string {
     return this._namespace;
@@ -71,8 +75,19 @@ export class Logger {
     this._namespace = namespace;
   }
 
-  public static onLog(callback: ILoggerhythmHook): void {
-    logCallbacks.push(callback);
+  public static subscribe(callback: ILoggerhythmHook): ILoggerSubscription {
+    subscribers.push(callback);
+
+    const subscription: ILoggerSubscription = {
+      dispose(): void {
+        const subscriptionIndex: number = subscribers.indexOf(callback);
+        if (subscriptionIndex !== -1) {
+          subscribers.splice(subscriptionIndex, 1);
+        }
+      },
+    };
+
+    return subscription;
   }
 
   public static setLogLevel(loglevel: string): void {
@@ -113,20 +128,31 @@ export class Logger {
 
   private _log(logLevel: LogLevel, message: string, ...logObjects: Array<any>): void {
     // tslint:disable-next-line
-    for (let callbackIndex = 0; callbackIndex < logCallbacks.length; callbackIndex++) {
-      logCallbacks[callbackIndex](logLevel, this.namespace, message, ...logObjects);
+    for (let callbackIndex = 0; callbackIndex < subscribers.length; callbackIndex++) {
+      subscribers[callbackIndex](logLevel, this.namespace, message, ...logObjects);
     }
 
     // tslint:disable-next-line
-    for (let callbackIndex = 0; callbackIndex < this._logCallbacks.length; callbackIndex++) {
-      this._logCallbacks[callbackIndex](logLevel, this.namespace, message, ...logObjects);
+    for (let callbackIndex = 0; callbackIndex < this.subscribers.length; callbackIndex++) {
+      this.subscribers[callbackIndex](logLevel, this.namespace, message, ...logObjects);
     }
 
     const msg: string = `[${this.namespace}] ${message}`;
     winston.log(logLevel, msg, ...logObjects);
   }
 
-  public onLog(callback: ILoggerhythmHook): void {
-    this._logCallbacks.push(callback);
+  public subscribe(callback: ILoggerhythmHook): ILoggerSubscription {
+    this.subscribers.push(callback);
+
+    const subscription: ILoggerSubscription = {
+      dispose(): void {
+        const subscriptionIndex: number = this.subscribers.indexOf(callback);
+        if (subscriptionIndex !== -1) {
+          this.subscribers.splice(subscriptionIndex, 1);
+        }
+      },
+    };
+
+    return subscription;
   }
 }

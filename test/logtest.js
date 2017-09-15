@@ -6,10 +6,10 @@ var l1 = new loggerhythm_1.Logger('logger1');
 var l2 = new loggerhythm_1.Logger('logger2');
 var l3 = new loggerhythm_1.Logger('logger3');
 var l4 = new loggerhythm_1.Logger('logger4');
-l1.onLog(function (loglevel, namespace, message) {
+l1.subscribe(function (loglevel, namespace, message) {
     console.log('l1');
 });
-loggerhythm_1.Logger.onLog(function (loglevel, namespace, message) {
+loggerhythm_1.Logger.subscribe(function (loglevel, namespace, message) {
     console.log('global');
 });
 defaultLogger.debug('hello default');

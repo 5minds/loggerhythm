@@ -8,11 +8,11 @@ const l2 = new logger('logger2');
 const l3 = new logger('logger3');
 const l4 = new logger('logger4');
 
-l1.onLog((loglevel, namespace, message) => {
+l1.subscribe((loglevel, namespace, message) => {
   console.log('l1')
 })
 
-logger.onLog((loglevel, namespace, message) => {
+const globalSubscription = logger.subscribe((loglevel, namespace, message) => {
   console.log('global')
 })
 
@@ -22,6 +22,8 @@ l1.debug('hello l1');
 l1.debug('hello l1', 1, 2);
 l1.debug('hello l1', {v1: 1, v2: 2});
 l1.debug('hello l1', 1);
+
+
 
 const meta = {
   hallo: 'welt',
@@ -45,6 +47,7 @@ l2.error('error l2');
 l2.error(new Error('hello'));
 l2.critical('crit l2');
 
+globalSubscription.dispose();
 logger.setLogLevel('warn');
 
 l3.debug('debug not logged');
