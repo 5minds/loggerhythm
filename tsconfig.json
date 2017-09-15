@@ -3,7 +3,7 @@
     "enableAutoDiscovery": true
   },
   "compilerOptions": {
-    "module": "amd",
+    "module": "commonjs",
     "target": "es2017",
     "outDir": "dist",
     "lib": [
