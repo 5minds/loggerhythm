@@ -3,23 +3,26 @@ A [winston](https://github.com/winstonjs/winston)-wrapper to log in a
 [debug](https://github.com/visionmedia/debug)-like manner including namespaces
 
 ## Usage
-Loggerhythm exports a function, which requires a namespace and returns the
-logger-class. This class has different log-functions for different log-levels.
-By default, the avaliable loglevels are:
+Loggerhythm exports a Logger-class, whose instances have different log-functions for different log-levels.
+the avaliable loglevels are:
 
-- critical
-- error
-- warn
-- info
-- verbose
-- debug
-- silly
+0. critical
+1. error
+2. warn
+3. info
+4. verbose
+5. debug
+6. silly
+
+***critical* and *error* log to `stderr`, everything else logs to `stdout`!**
 
 #### Example
 
 ```javascript
-const logger = require('loggerhythm')('readme-namespace');
+const Logger = require('loggerhythm').Logger;
+// import {Logger} from 'loggerhythm'; // for TypeScript
 
+const logger = new Logger('readme-namespace')
 logger.info('foo');
 logger.warn('bar');
 ```
@@ -32,38 +35,57 @@ The output would look like this (the different log-leves use different colors):
 ```
 
 ## Methods
-alongside the different log-methods you have (within setup) the setLevel-method
-to tell the module, what the minimal loglevel is a message needs to have to be
-logged. This setting is global, and will effect all loggers. You also have this
-method, if you only require loggerhythm, without giving it a namespace, although
-you **cannot** use these non-namespaced instances to log things.
+### Static
+The Logger-Class has static methods, that can be used to *globally* set loggerhythm-config and register global log-hooks:
 
-```javascript
-const logger = require('loggerhythm')('readme-namespace');
+```TypeScript
+const Logger = require('loggerhythm').Logger;
+const Loglevel = require('loggerhythm').LogLevel;
+// import {Logger, LogLevel} from 'loggerhythm'; // for TypeScript
 
-logger.setup.setLevel('warn');
-logger.info('foo');
-logger.warn('bar');
-```
-or
+// Set the loglevel to only log warnings, errors and critical-logs
+Logger.setLogLevel(LogLevel.WARN);
 
-```javascript
-const logger = require('loggerhythm')('readme-namespace');
-const someOtherLogger = require('loggerhythm');
+// Set the max. log-depth
+Logger.setMaxObjectLogDepth(3);
 
-someOtherLogger.setup.setLevel('warn');
-logger.info('foo');
-logger.warn('bar');
-```
-will output:
+// get informed about all Logs everywhere
+const subscription = Logger.subscribe((logLevel, namespace, message, ...logObjects) => {
+  // do stuff
+});
 
-```
-2016-08-30T14:14:48.520Z - warn:     [readme-namespace] bar
+// do stuff
+
+// unsubscribe
+subscription.dispose();
 ```
 
-## Todo
+### Instance-methods
+The Instances of the Logger-class have a log-method for every loglevel and a subscribe-method to get informed about
+logs of that instance
 
-Loggerhythm can not yet log to files, only to the console. It is planned that
-logs can be stored to files independent of the DEBUG-environment-variable. With
-that, you could get a complete, persistent log, aswell as the DEBUG-filtered
-console-output.
+```TypeScript
+const Logger = require('loggerhythm').Logger;
+// import {Logger} from 'loggerhythm'; // for TypeScript
+
+const logger = new Logger('readme-namespace');
+
+// get informed about all the logs of that instance
+const subscription = Logger.subscribe((logLevel, namespace, message, ...logObjects) => {
+  // namespace will always be 'readme-namespace' here
+  // do stuff
+});
+
+logger.critical('critical log');
+logger.error('error-log', new Error('hello'));
+logger.warn('warning-log');
+logger.info('have some info', {v1: 1, v2: 2, test: ['some', 'test', 'array']});
+logger.verbose('some', 'more detailed', 'info');
+logger.debug('denug-log');
+logger.silly('some stupidly verbose log');
+
+// do stuff
+
+// unsubscribe
+subscription.dispose();
+```

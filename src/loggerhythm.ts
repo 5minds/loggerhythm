@@ -21,7 +21,7 @@ export interface ILoggerSubscription {
 function defaultSetup(): void {
   winston.remove(winston.transports.Console);
   winston.add(winston.transports.Console, {
-    stderrLevels: [LogLevel.WARN, LogLevel.ERROR, LogLevel.CRITICAL],
+    stderrLevels: [LogLevel.ERROR, LogLevel.CRITICAL],
     colorize: true,
     handleExceptions: true,
     humanReadableUnhandledException: true,
