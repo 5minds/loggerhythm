@@ -34,8 +34,8 @@
   },
   "license": "MIT",
   "files": [
-    "index.js",
-    "lib/",
+    "dist/",
+    "src/",
     "History.md",
     "LICENSE.md",
     "README.md"
