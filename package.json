@@ -1,13 +1,15 @@
 {
   "name": "loggerhythm",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "wrapper for winston to use it like debug with namespaces",
   "publicConfig": {
     "registry": "https://registry.npmjs.org"
   },
-  "main": "index.js",
+  "main": "dist/commonjs/loggerhythm.js",
+  "typings": "dist/loggerhythm.d.ts",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "build": "gulp build"
   },
   "author": {
     "name": "5Minds IT-Solutions GmbH & Co. KG",
@@ -32,8 +34,8 @@
   },
   "license": "MIT",
   "files": [
-    "index.js",
-    "lib/",
+    "dist/",
+    "src/",
     "History.md",
     "LICENSE.md",
     "README.md"
@@ -42,10 +44,15 @@
     "winston": "^2.2.0"
   },
   "devDependencies": {
-    "eslint": "^3.4.0",
-    "eslint-config-5minds": "^0.0.3",
-    "eslint-plugin-import": "^1.14.0",
+    "@types/winston": "^2.3.5",
+    "gulp": "^3.9.1",
+    "gulptraum": "^2.2.2",
+    "gulptraum-typescript": "^1.3.3",
     "mocha": "^3.0.2",
-    "should": "^11.1.0"
+    "should": "^11.1.0",
+    "tsconfig": "^7.0.0",
+    "tslint": "^5.7.0",
+    "tslint-eslint-config-5minds": "^1.0.2",
+    "typescript": "^2.5.2"
   }
 }

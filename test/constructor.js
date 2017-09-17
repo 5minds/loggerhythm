@@ -2,14 +2,14 @@
 
 const should = require('should');
 
-const create_instance = require("../index");
+const Logger = require('../dist/commonjs/loggerhythm').Logger;
 
 describe('Loggerhythm#constructor', () => {
 
   let logger;
 
   beforeEach(() => {
-    logger = create_instance();
+    logger = new Logger();
   });
 
   it('sould check if the logger exists', () => {
