@@ -38,7 +38,7 @@ The output would look like this (the different log-leves use different colors):
 ### Static
 The Logger-Class has static methods, that can be used to *globally* set loggerhythm-config and register global log-hooks:
 
-```TypeScript
+```javascript
 const Logger = require('loggerhythm').Logger;
 const Loglevel = require('loggerhythm').LogLevel;
 // import {Logger, LogLevel} from 'loggerhythm'; // for TypeScript
@@ -64,7 +64,7 @@ subscription.dispose();
 The Instances of the Logger-class have a log-method for every loglevel and a subscribe-method to get informed about
 logs of that instance
 
-```TypeScript
+```javascript
 const Logger = require('loggerhythm').Logger;
 // import {Logger} from 'loggerhythm'; // for TypeScript
 
