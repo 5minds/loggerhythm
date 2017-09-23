@@ -21,7 +21,8 @@ meta.lelelel.test1234 = meta.lelelel;
 
 const error = new Error('someErrorMessage');
 
-suite.add('infomessage', () => {
+suite
+.add('infomessage', () => {
   l1.info('info l1');
 })
 .add('errorMessage', () => {

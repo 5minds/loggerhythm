@@ -23,7 +23,6 @@ const stdoutIsAvaliable: boolean = process !== undefined &&
                                    process.stderr !== undefined;
 if (stdoutIsAvaliable) {
   const inspectOptions: any = {
-    showHidden: true,
     depth: null,
     colors: true,
   };
@@ -34,7 +33,15 @@ if (stdoutIsAvaliable) {
   stderrWrite = (message: string): void => {
     process.stderr.write(`${message}\n`);
   };
-  objectToString = (input: any): string => {
+  objectToString = (input: any): any => {
+    if (typeof input === 'string') {
+      return input;
+    }
+
+    if (typeof input === 'number') {
+      return input;
+    }
+
     return util.inspect(input, inspectOptions);
   };
 }
@@ -101,6 +108,7 @@ export class Logger {
   }
 
   private _log(logLevel: LogLevel, message: string, ...parameter: Array<any>): void {
+
     // tslint:disable-next-line
     for (let callbackIndex = 0; callbackIndex < subscribers.length; callbackIndex++) {
       subscribers[callbackIndex](logLevel, this.namespace, message, ...parameter);
