@@ -14,9 +14,6 @@ interface ILogFunction {
 // fallback for browsers
 let stdoutWrite: ILogFunction = console.log;
 let stderrWrite: ILogFunction = console.log;
-let objectToString: (input: any) => any = (input: string): any => {
-  return input;
-};
 
 const stdoutIsAvaliable: boolean = process !== undefined &&
                                    process.stdout !== undefined &&
@@ -27,13 +24,7 @@ if (stdoutIsAvaliable) {
     colors: true,
   };
 
-  stdoutWrite = (message: string): void => {
-    process.stdout.write(`${message}\n`);
-  };
-  stderrWrite = (message: string): void => {
-    process.stderr.write(`${message}\n`);
-  };
-  objectToString = (input: any): any => {
+  const objectToString = (input: any): any => {
     if (typeof input === 'string') {
       return input;
     }
@@ -43,6 +34,21 @@ if (stdoutIsAvaliable) {
     }
 
     return util.inspect(input, inspectOptions);
+  };
+
+  stdoutWrite = (prefix: string, message: string, ...parameter: Array<any>): void => {
+    for (let i = 0; i < parameter.length; i++) {
+      message = `${message} ${objectToString(parameter[i])}`;
+    }
+
+    process.stdout.write(prefix + message + '\n');
+  };
+  stderrWrite = (prefix: string, message: string, ...parameter: Array<any>): void => {
+    for (let i = 0; i < parameter.length; i++) {
+      message = `${message} ${objectToString(parameter[i])}`;
+    }
+
+    process.stderr.write(prefix + message + '\n');
   };
 }
 
@@ -67,6 +73,7 @@ export class Logger {
 
   private _namespace: string;
   private subscribers: Array<ILoggerhythmHook> = [];
+  private namespaceStrings: {[loglevel: string]: string} = {};
 
   public get namespace(): string {
     return this._namespace;
@@ -74,6 +81,9 @@ export class Logger {
 
   constructor(namespace: string = '') {
     this._namespace = namespace;
+    for (const logLevel in logSettings) {
+      this.namespaceStrings[logLevel] = ` - ${logSettings[logLevel].colorFunction(logLevel)}: [${namespace}] `;
+    }
   }
 
   public static subscribe(callback: ILoggerhythmHook): ILoggerSubscription {
@@ -119,12 +129,7 @@ export class Logger {
       this.subscribers[callbackIndex](logLevel, this.namespace, message, ...parameter);
     }
 
-    for (let i = 0; i < parameter.length; i++) {
-      message = `${message} ${objectToString(parameter[i])}`;
-    }
-
-    const msg: string = `${new Date().toISOString()} - ${logSettings[logLevel].colorFunction(logLevel)}: [${this.namespace}] ${message}`;
-    logSettings[logLevel].logFunction(msg);
+    logSettings[logLevel].logFunction(new Date().toISOString() + this.namespaceStrings[logLevel], message, ...parameter);
   }
 
   public subscribe(callback: ILoggerhythmHook): ILoggerSubscription {

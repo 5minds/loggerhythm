@@ -1,7 +1,7 @@
 const Benchmark = require('benchmark');
 const suite = new Benchmark.Suite;
 
-const logger = require('./dist/commonjs/loggerhythm').Logger;
+const logger = require('../dist/commonjs/loggerhythm').Logger;
 const l1 = new logger('logger1');
 
 const meta = {
@@ -42,4 +42,7 @@ suite
     return `${test.name}: ${parseInt(test.hz)}`;
   }));
 })
-.run();
+
+setTimeout(() => {
+  suite.run();
+}, 5000)
