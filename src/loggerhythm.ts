@@ -1,16 +1,8 @@
 import * as chalk from 'chalk';
 import * as util from 'util';
 
-export enum LogLevel {
-  ERROR = 'error',
-  WARN = 'warn',
-  INFO = 'info',
-  VERBOSE = 'verbose',
-}
+import {ILogFunction, ILoggerhythmHook, ILoggerSubscription, LogLevel} from './interfaces';
 
-interface ILogFunction {
-  (message: string, ...parameter: Array<any>): void;
-}
 // fallback for browsers
 let stdoutWrite: ILogFunction = console.log;
 let stderrWrite: ILogFunction = console.log;
@@ -19,17 +11,10 @@ const stdoutIsAvaliable: boolean = process !== undefined &&
                                    process.stdout !== undefined &&
                                    process.stderr !== undefined;
 if (stdoutIsAvaliable) {
-  const inspectOptions: any = {
-    depth: null,
-    colors: true,
-  };
+  const inspectOptions: any = {depth: null, colors: false};
 
   const objectToString = (input: any): any => {
-    if (typeof input === 'string') {
-      return input;
-    }
-
-    if (typeof input === 'number') {
+    if (typeof input === 'string' || typeof input === 'number') {
       return input;
     }
 
@@ -59,14 +44,6 @@ const logSettings: any = {
   [LogLevel.VERBOSE]: {colorFunction: chalk.gray, logFunction: stdoutWrite},
 };
 
-export interface ILoggerhythmHook {
-  (logLevel: LogLevel, namespace: string, message: string, ...parameter: Array<any>): void;
-}
-
-export interface ILoggerSubscription {
-  dispose(): void;
-}
-
 const subscribers: Array<ILoggerhythmHook> = [];
 
 export class Logger {
@@ -94,6 +71,20 @@ export class Logger {
         const subscriptionIndex: number = subscribers.indexOf(callback);
         if (subscriptionIndex !== -1) {
           subscribers.splice(subscriptionIndex, 1);
+        }
+      },
+    };
+
+    return subscription;
+  }
+  public subscribe(callback: ILoggerhythmHook): ILoggerSubscription {
+    this.subscribers.push(callback);
+
+    const subscription: ILoggerSubscription = {
+      dispose(): void {
+        const subscriptionIndex: number = this.subscribers.indexOf(callback);
+        if (subscriptionIndex !== -1) {
+          this.subscribers.splice(subscriptionIndex, 1);
         }
       },
     };
@@ -130,20 +121,5 @@ export class Logger {
     }
 
     logSettings[logLevel].logFunction(new Date().toISOString() + this.namespaceStrings[logLevel], message, ...parameter);
-  }
-
-  public subscribe(callback: ILoggerhythmHook): ILoggerSubscription {
-    this.subscribers.push(callback);
-
-    const subscription: ILoggerSubscription = {
-      dispose(): void {
-        const subscriptionIndex: number = this.subscribers.indexOf(callback);
-        if (subscriptionIndex !== -1) {
-          this.subscribers.splice(subscriptionIndex, 1);
-        }
-      },
-    };
-
-    return subscription;
   }
 }
