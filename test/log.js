@@ -1,12 +1,12 @@
 'use strict';
 
 const logger = require('../dist/commonjs/loggerhythm').Logger;
-const defaultLogger = new logger();
+const defaultLogger = logger.createLogger();
 
-const l1 = new logger('logger1');
-const l2 = new logger('logger2');
-const l3 = new logger('logger3');
-const l4 = new logger('logger4');
+const l1 = logger.createLogger('logger1');
+const l2 = logger.createLogger('logger2');
+const l3 = logger.createLogger('logger3');
+const l4 = logger.createLogger('logger4');
 
 l1.subscribe((loglevel, namespace, message) => {
   console.log('l1')

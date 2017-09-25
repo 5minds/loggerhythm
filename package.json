@@ -9,7 +9,8 @@
   "typings": "dist/loggerhythm.d.ts",
   "scripts": {
     "test": "mocha",
-    "build": "gulp build"
+    "build": "gulp build",
+    "benchmark": "node benchmarks/benchmark.js > test.txt 2>&1 && tail test.txt && rm test.txt"
   },
   "author": {
     "name": "5Minds IT-Solutions GmbH & Co. KG",
@@ -45,6 +46,7 @@
   },
   "devDependencies": {
     "@types/chalk": "^0.4.31",
+    "benchmark": "^2.1.4",
     "gulp": "^3.9.1",
     "gulptraum": "^2.2.2",
     "gulptraum-typescript": "^1.3.3",

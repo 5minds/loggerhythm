@@ -11,20 +11,20 @@ const prepared = ` - ${loglevel}: [${namespace}] `;
 
 suite
 .add('template-string', () => {
-  const msg = `${new Date().toISOString()} - ${loglevel}: [${namespace}] ${message}`;
+  const msg = `${new Date().toISOString()} - ${loglevel}: [${namespace}] ${message}\n`;
 
 })
 .add('util.format', () => {
-  const msg = util.format('%s - %s: [%s] %s', new Date().toISOString(), loglevel, namespace, message);
+  const msg = util.format('%s - %s: [%s] %s\n', new Date().toISOString(), loglevel, namespace, message);
 })
 .add('template-string prepared', () => {
-  const msg = `${new Date().toISOString()}${prepared}${message}`;
+  const msg = `${new Date().toISOString()}${prepared}${message}\n`;
 })
 .add('util.format prepared', () => {
-  const msg = util.format('%s%s%s', new Date().toISOString(), prepared, message);
+  const msg = util.format('%s%s%s\n', new Date().toISOString(), prepared, message);
 })
 .add('concat prepared', () => {
-  const msg = new Date().toISOString() + prepared + message;
+  const msg = new Date().toISOString() + prepared + message + '\n';
 })
 .add('add newline string', () => {
   const msg = new Date().toISOString() + '\n';

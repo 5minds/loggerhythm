@@ -13,7 +13,7 @@ const stdoutIsAvaliable: boolean = process !== undefined &&
 if (stdoutIsAvaliable) {
   const inspectOptions: any = {depth: null, colors: false};
 
-  const objectToString = (input: any): any => {
+  const objectToString: (input: any) => any = (input: any): any => {
     if (typeof input === 'string' || typeof input === 'number') {
       return input;
     }
@@ -21,18 +21,26 @@ if (stdoutIsAvaliable) {
     return util.inspect(input, inspectOptions);
   };
 
-  stdoutWrite = (prefix: string, message: string, ...parameter: Array<any>): void => {
-    for (let i = 0; i < parameter.length; i++) {
-      message = `${message} ${objectToString(parameter[i])}`;
+  stdoutWrite = (prefix: string, message: string, ...logObjects: Array<any>): void => {
+    // for-of are usually slower than regular for-loops (see https://jsperf.com/for-of-vs-for-loop)
+    // tslint:disable-next-line:prefer-for-of
+    for (let index: number = 0; index < logObjects.length; index++) {
+      message = `${message} ${objectToString(logObjects[index])}`;
     }
 
+    // template-strings are a little slower, when it comes to pure string
+    // concatination (see benchmarks/benchmark_string_concat.js)
+    // tslint:disable-next-line:prefer-template
     process.stdout.write(prefix + message + '\n');
   };
-  stderrWrite = (prefix: string, message: string, ...parameter: Array<any>): void => {
-    for (let i = 0; i < parameter.length; i++) {
-      message = `${message} ${objectToString(parameter[i])}`;
+
+  stderrWrite = (prefix: string, message: string, ...logObjects: Array<any>): void => {
+    // tslint:disable-next-line:prefer-for-of
+    for (let index: number = 0; index < logObjects.length; index++) {
+      message = `${message} ${objectToString(logObjects[index])}`;
     }
 
+    // tslint:disable-next-line:prefer-template
     process.stderr.write(prefix + message + '\n');
   };
 }
@@ -77,6 +85,11 @@ export class Logger {
 
     return subscription;
   }
+
+  public static createLogger(namespace?: string): Logger {
+    return new Logger(namespace);
+  }
+
   public subscribe(callback: ILoggerhythmHook): ILoggerSubscription {
     this.subscribers.push(callback);
 
@@ -92,34 +105,38 @@ export class Logger {
     return subscription;
   }
 
-  public error(message: string, ...parameter: Array<any>): void {
-    this._log(LogLevel.ERROR, message, ...parameter);
+  public createLogger(namespace?: string): Logger {
+    return Logger.createLogger(namespace);
   }
 
-  public warn(message: string, ...parameter: Array<any>): void {
-    this._log(LogLevel.WARN, message, ...parameter);
+  public error(message: string, ...logObjects: Array<any>): void {
+    this._log(LogLevel.ERROR, message, ...logObjects);
   }
 
-  public info(message: string, ...parameter: Array<any>): void {
-    this._log(LogLevel.INFO, message, ...parameter);
+  public warn(message: string, ...logObjects: Array<any>): void {
+    this._log(LogLevel.WARN, message, ...logObjects);
   }
 
-  public verbose(message: string, ...parameter: Array<any>): void {
-    this._log(LogLevel.VERBOSE, message, ...parameter);
+  public info(message: string, ...logObjects: Array<any>): void {
+    this._log(LogLevel.INFO, message, ...logObjects);
   }
 
-  private _log(logLevel: LogLevel, message: string, ...parameter: Array<any>): void {
+  public verbose(message: string, ...logObjects: Array<any>): void {
+    this._log(LogLevel.VERBOSE, message, ...logObjects);
+  }
+
+  private _log(logLevel: LogLevel, message: string, ...logObjects: Array<any>): void {
 
     // tslint:disable-next-line
     for (let callbackIndex = 0; callbackIndex < subscribers.length; callbackIndex++) {
-      subscribers[callbackIndex](logLevel, this.namespace, message, ...parameter);
+      subscribers[callbackIndex](logLevel, this.namespace, message, ...logObjects);
     }
 
     // tslint:disable-next-line
     for (let callbackIndex = 0; callbackIndex < this.subscribers.length; callbackIndex++) {
-      this.subscribers[callbackIndex](logLevel, this.namespace, message, ...parameter);
+      this.subscribers[callbackIndex](logLevel, this.namespace, message, ...logObjects);
     }
 
-    logSettings[logLevel].logFunction(new Date().toISOString() + this.namespaceStrings[logLevel], message, ...parameter);
+    logSettings[logLevel].logFunction(new Date().toISOString() + this.namespaceStrings[logLevel], message, ...logObjects);
   }
 }
