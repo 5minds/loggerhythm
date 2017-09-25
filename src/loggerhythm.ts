@@ -11,7 +11,7 @@ const stdoutIsAvaliable: boolean = process !== undefined &&
                                    process.stdout !== undefined &&
                                    process.stderr !== undefined;
 if (stdoutIsAvaliable) {
-  const inspectOptions: any = {depth: null, colors: false};
+  const inspectOptions: any = {depth: null, colors: true};
 
   const objectToString: (input: any) => any = (input: any): any => {
     if (typeof input === 'string' || typeof input === 'number') {
