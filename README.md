@@ -72,6 +72,9 @@ logger.warn('warning-log');
 logger.info('have some info', {v1: 1, v2: 2, test: ['some', 'test', 'array']});
 logger.verbose('some', 'more detailed', 'info');
 
+// this loggers namespace will be 'readme-namespace:child-logger-lamespace'
+const logger2 = logger.createChildLogger('child-logger-lamespace');
+
 // do stuff
 
 // unsubscribe

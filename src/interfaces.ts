@@ -6,11 +6,11 @@ export enum LogLevel {
 }
 
 export interface ILogFunction {
-  (message: string, ...parameter: Array<any>): void;
+  (message: string, ...logObjects: Array<any>): void;
 }
 
 export interface ILoggerhythmHook {
-  (logLevel: LogLevel, namespace: string, message: string, ...parameter: Array<any>): void;
+  (logLevel: LogLevel, namespace: string, message: string, ...logObjects: Array<any>): void;
 }
 
 export interface ILoggerSubscription {

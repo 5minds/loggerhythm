@@ -43,6 +43,4 @@ suite
   }));
 })
 
-setTimeout(() => {
   suite.run();
-}, 5000)

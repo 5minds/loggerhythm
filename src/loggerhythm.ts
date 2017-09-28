@@ -7,10 +7,10 @@ import {ILogFunction, ILoggerhythmHook, ILoggerSubscription, LogLevel} from './i
 let stdoutWrite: ILogFunction = console.log;
 let stderrWrite: ILogFunction = console.log;
 
-const stdoutIsAvaliable: boolean = process !== undefined &&
-                                   process.stdout !== undefined &&
-                                   process.stderr !== undefined;
-if (stdoutIsAvaliable) {
+const stdPipesAreAvaliable: boolean = process !== undefined &&
+                                      process.stdout !== undefined &&
+                                      process.stderr !== undefined;
+if (stdPipesAreAvaliable) {
   const inspectOptions: any = {depth: null, colors: true};
 
   const objectToString: (input: any) => any = (input: any): any => {
@@ -105,8 +105,8 @@ export class Logger {
     return subscription;
   }
 
-  public createLogger(namespace?: string): Logger {
-    return Logger.createLogger(namespace);
+  public createChildLogger(namespace?: string): Logger {
+    return Logger.createLogger(`${this.namespace}:${namespace}`);
   }
 
   public error(message: string, ...logObjects: Array<any>): void {

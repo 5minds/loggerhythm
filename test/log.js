@@ -4,7 +4,7 @@ const logger = require('../dist/commonjs/loggerhythm').Logger;
 const defaultLogger = logger.createLogger();
 
 const l1 = logger.createLogger('logger1');
-const l2 = logger.createLogger('logger2');
+const l2 = l1.createChildLogger('logger2');
 const l3 = logger.createLogger('logger3');
 const l4 = logger.createLogger('logger4');
 
