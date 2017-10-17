@@ -1,7 +1,7 @@
 import * as chalk from 'chalk';
 import * as util from 'util';
 
-import {ILogFunction, ILoggerhythmHook, ILoggerSubscription, LogLevel} from './interfaces';
+import {ILogFunction, ILoggerhythmHook, ILoggerSubscription, ILogSettings, LogLevel} from './interfaces';
 
 // fallback for browsers
 let stdoutWrite: ILogFunction = console.log;
@@ -46,7 +46,7 @@ if (stdPipesAreAvaliable) {
 }
 
 const namespaceColorFunction: chalk.ChalkChain = chalk.cyan;
-const logSettings: any = {
+const logSettings: ILogSettings = {
   [LogLevel.ERROR]: {colorFunction: chalk.red, logFunction: stderrWrite},
   [LogLevel.WARN]: {colorFunction: chalk.yellow, logFunction: stdoutWrite},
   [LogLevel.INFO]: {colorFunction: chalk.blue, logFunction: stdoutWrite},

@@ -1,3 +1,5 @@
+import * as chalk from 'chalk';
+
 export enum LogLevel {
   ERROR = 'error',
   WARN = 'warn',
@@ -15,4 +17,10 @@ export interface ILoggerhythmHook {
 
 export interface ILoggerSubscription {
   dispose(): void;
+}
+
+export interface ILogSettings {
+  [loglevel: string]: {
+    colorFunction: chalk.ChalkChain, logFunction: ILogFunction,
+  };
 }
