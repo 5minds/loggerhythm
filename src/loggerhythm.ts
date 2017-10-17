@@ -45,6 +45,7 @@ if (stdPipesAreAvaliable) {
   };
 }
 
+const namespaceColorFunction: chalk.ChalkChain = chalk.cyan;
 const logSettings: any = {
   [LogLevel.ERROR]: {colorFunction: chalk.red, logFunction: stderrWrite},
   [LogLevel.WARN]: {colorFunction: chalk.yellow, logFunction: stdoutWrite},
@@ -67,7 +68,8 @@ export class Logger {
   constructor(namespace: string = '') {
     this._namespace = namespace;
     for (const logLevel in logSettings) {
-      this.namespaceStrings[logLevel] = ` - ${logSettings[logLevel].colorFunction(logLevel)}: [${namespace}] `;
+      const coloredNamespace: string = namespaceColorFunction(`[${namespace}]`);
+      this.namespaceStrings[logLevel] = ` - ${logSettings[logLevel].colorFunction(logLevel)}: ${coloredNamespace} `;
     }
   }
 
