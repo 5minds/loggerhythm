@@ -1,7 +1,7 @@
 import * as chalk from 'chalk';
 import * as util from 'util';
 
-import {ILogFunction, ILoggerhythmHook, ILoggerSubscription, LogLevel} from './interfaces';
+import {ILogFunction, ILoggerhythmHook, ILoggerSubscription, ILogSettings, LogLevel} from './interfaces';
 
 // fallback for browsers
 let stdoutWrite: ILogFunction = console.log;
@@ -45,7 +45,8 @@ if (stdPipesAreAvaliable) {
   };
 }
 
-const logSettings: any = {
+const namespaceColorFunction: chalk.ChalkChain = chalk.cyan;
+const logSettings: ILogSettings = {
   [LogLevel.ERROR]: {colorFunction: chalk.red, logFunction: stderrWrite},
   [LogLevel.WARN]: {colorFunction: chalk.yellow, logFunction: stdoutWrite},
   [LogLevel.INFO]: {colorFunction: chalk.blue, logFunction: stdoutWrite},
@@ -67,7 +68,8 @@ export class Logger {
   constructor(namespace: string = '') {
     this._namespace = namespace;
     for (const logLevel in logSettings) {
-      this.namespaceStrings[logLevel] = ` - ${logSettings[logLevel].colorFunction(logLevel)}: [${namespace}] `;
+      const coloredNamespace: string = namespaceColorFunction(`[${namespace}]`);
+      this.namespaceStrings[logLevel] = ` - ${logSettings[logLevel].colorFunction(logLevel)}: ${coloredNamespace} `;
     }
   }
 
