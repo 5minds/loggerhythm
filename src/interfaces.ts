@@ -1,4 +1,4 @@
-import * as chalk from 'chalk';
+import {Chalk, default as chalk} from 'chalk';
 
 export enum LogLevel {
   ERROR = 'error',
@@ -21,6 +21,6 @@ export interface ILoggerSubscription {
 
 export interface ILogSettings {
   [loglevel: string]: {
-    colorFunction: chalk.ChalkChain, logFunction: ILogFunction,
+    colorFunction: Chalk, logFunction: ILogFunction,
   };
 }
