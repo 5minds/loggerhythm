@@ -1,6 +1,6 @@
 {
   "name": "loggerhythm",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "wrapper for winston to use it like debug with namespaces",
   "publicConfig": {
     "registry": "https://registry.npmjs.org"
