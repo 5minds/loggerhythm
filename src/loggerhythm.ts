@@ -45,11 +45,11 @@ if (stdPipesAreAvaliable) {
   };
 }
 
-const namespaceColorFunction: Chalk = chalk.cyan;
+const namespaceColorBaseHue: number = 180;
 const logSettings: ILogSettings = {
   [LogLevel.ERROR]: {colorFunction: chalk.red, logFunction: stderrWrite},
   [LogLevel.WARN]: {colorFunction: chalk.yellow, logFunction: stdoutWrite},
-  [LogLevel.INFO]: {colorFunction: chalk.blue, logFunction: stdoutWrite},
+  [LogLevel.INFO]: {colorFunction: chalk.rgb(0, 143, 219), logFunction: stdoutWrite},
   [LogLevel.VERBOSE]: {colorFunction: chalk.gray, logFunction: stdoutWrite},
 };
 
@@ -59,16 +59,26 @@ export class Logger {
 
   private _namespace: string;
   private subscribers: Array<ILoggerhythmHook> = [];
+  private namespaces: Array<string>;
   private namespaceStrings: {[loglevel: string]: string} = {};
 
   public get namespace(): string {
     return this._namespace;
   }
 
-  constructor(namespace: string = '') {
+  constructor(namespace: string = '', parentNamespaces: Array<string> = []) {
+    this.namespaces = parentNamespaces.concat(namespace);
     this._namespace = namespace;
+    const coloredNamespaces = this.namespaces.map((namespace: string, index: number) => {
+      return chalk.hwb(namespaceColorBaseHue - index * 30, 0, 0)(namespace);
+    });
+
+    const openBracket = chalk.dim('[');
+    const namespaces = coloredNamespaces.join(chalk.dim(':'));
+    const closingBracket = chalk.dim(']');
+    const coloredNamespace = (`${openBracket}${namespaces}${closingBracket}`);
+
     for (const logLevel in logSettings) {
-      const coloredNamespace: string = namespaceColorFunction(`[${namespace}]`);
       this.namespaceStrings[logLevel] = ` - ${logSettings[logLevel].colorFunction(logLevel)}: ${coloredNamespace} `;
     }
   }
@@ -88,8 +98,8 @@ export class Logger {
     return subscription;
   }
 
-  public static createLogger(namespace?: string): Logger {
-    return new Logger(namespace);
+  public static createLogger(namespace?: string, parentNamespaces?: Array<string>): Logger {
+    return new Logger(namespace, parentNamespaces);
   }
 
   public subscribe(callback: ILoggerhythmHook): ILoggerSubscription {
@@ -108,7 +118,7 @@ export class Logger {
   }
 
   public createChildLogger(namespace?: string): Logger {
-    return Logger.createLogger(`${this.namespace}:${namespace}`);
+    return Logger.createLogger(namespace, this.namespaces);
   }
 
   public error(message: string, ...logObjects: Array<any>): void {
