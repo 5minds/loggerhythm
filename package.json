@@ -49,6 +49,7 @@
     "chalk": "^2.1.0"
   },
   "devDependencies": {
+    "@types/node": "^10.0.0",
     "benchmark": "^2.1.4",
     "gulp": "^4.0.0",
     "gulptraum": "^3.1.0",
