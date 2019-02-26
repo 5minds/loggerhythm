@@ -25,6 +25,10 @@
   ],
   "contributors": [
     {
+      "name": "Christian Werner",
+      "email": "christian.werner@5Minds.de"
+    },
+    {
       "name": "Martin Moellenbeck",
       "email": "martin.moellenbeck@5Minds.de"
     }
@@ -46,14 +50,14 @@
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
-    "gulp": "^3.9.1",
-    "gulptraum": "^2.2.2",
-    "gulptraum-typescript": "^1.3.3",
-    "mocha": "^3.0.2",
-    "should": "^11.1.0",
+    "gulp": "^4.0.0",
+    "gulptraum": "^3.1.0",
+    "gulptraum-typescript": "^3.0.0",
+    "mocha": "^5.2.0",
+    "should": "^13.2.3",
     "tsconfig": "^7.0.0",
     "tslint": "^5.7.0",
     "tslint-eslint-config-5minds": "^1.0.2",
-    "typescript": "^2.5.2"
+    "typescript": "^3.3.0"
   }
 }
