@@ -6,10 +6,11 @@ import {ILogFunction, ILoggerhythmHook, ILoggerSubscription, ILogSettings, LogLe
 // fallback for browsers
 let stdoutWrite: ILogFunction = console.log;
 let stderrWrite: ILogFunction = console.log;
+let devNullWrite: ILogFunction;
 
 const stdPipesAreAvaliable: boolean = process !== undefined &&
-                                      process.stdout !== undefined &&
-                                      process.stderr !== undefined;
+  process.stdout !== undefined &&
+  process.stderr !== undefined;
 if (stdPipesAreAvaliable) {
   const inspectOptions: any = {depth: null, colors: true};
 
@@ -43,6 +44,10 @@ if (stdPipesAreAvaliable) {
     // tslint:disable-next-line:prefer-template
     process.stderr.write(prefix + message + '\n');
   };
+
+  devNullWrite = (prefix: string, message: string, ...logObjects: Array<any>): void => {
+
+  };
 }
 
 const namespaceColorBaseHue: number = 180;
@@ -50,7 +55,7 @@ const logSettings: ILogSettings = {
   [LogLevel.ERROR]: {colorFunction: chalk.red, logFunction: stderrWrite},
   [LogLevel.WARN]: {colorFunction: chalk.yellow, logFunction: stdoutWrite},
   [LogLevel.INFO]: {colorFunction: chalk.rgb(0, 143, 219), logFunction: stdoutWrite},
-  [LogLevel.VERBOSE]: {colorFunction: chalk.gray, logFunction: stdoutWrite},
+  [LogLevel.VERBOSE]: {colorFunction: chalk.gray, logFunction: devNullWrite},
 };
 
 const subscribers: Array<ILoggerhythmHook> = [];
