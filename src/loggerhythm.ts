@@ -139,6 +139,10 @@ export class Logger {
 
   private _log(logLevel: LogLevel, message: string, ...logObjects: Array<any>): void {
 
+    if (process.env.DISABLE_LOGGING == 'true') {
+      return;
+    }
+
     // tslint:disable-next-line
     for (let callbackIndex = 0; callbackIndex < subscribers.length; callbackIndex++) {
       subscribers[callbackIndex](logLevel, this.namespace, message, ...logObjects);
